@@ -1,0 +1,6 @@
+# Use together with compose.yml, never on its own.
+services:
+  bedrock:
+    environment:
+      ALLOW_LIST: "true"
+      ALLOW_LIST_USERS: ${ALLOW_LIST_USERS:?Set comma-separated Xbox gamertags for production}

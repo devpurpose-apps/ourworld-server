@@ -1,0 +1,10 @@
+[Unit]
+Description=Daily Minecraft Bedrock backup
+
+[Timer]
+OnCalendar=*-*-* 04:00:00
+Persistent=true
+Unit=minecraft-bedrock-backup.service
+
+[Install]
+WantedBy=timers.target

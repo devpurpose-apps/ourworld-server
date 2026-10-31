@@ -1,0 +1,47 @@
+name: minecraft-bedrock
+
+services:
+  bedrock:
+    image: ${BEDROCK_IMAGE:-itzg/minecraft-bedrock-server:latest}
+    platform: linux/amd64
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    stop_grace_period: 2m
+    environment:
+      EULA: ${EULA:?Set EULA=TRUE in .env after accepting the Minecraft EULA}
+      VERSION: ${BEDROCK_VERSION:-LATEST}
+      TZ: ${TZ:-Asia/Jakarta}
+      SERVER_NAME: ${SERVER_NAME:-Bedrock Bersama}
+      LEVEL_NAME: ${LEVEL_NAME:-world}
+      GAMEMODE: ${GAMEMODE:-survival}
+      DIFFICULTY: ${DIFFICULTY:-normal}
+      MAX_PLAYERS: ${MAX_PLAYERS:-10}
+      ONLINE_MODE: "true"
+      ALLOW_CHEATS: "false"
+      DEFAULT_PLAYER_PERMISSION_LEVEL: member
+      ALLOW_LIST: ${ALLOW_LIST:-false}
+      ALLOW_LIST_USERS: ${ALLOW_LIST_USERS:-}
+      VIEW_DISTANCE: ${VIEW_DISTANCE:-16}
+      TICK_DISTANCE: ${TICK_DISTANCE:-4}
+      TRANSPORT: nethernet
+      SERVER_PORT: ${SERVER_PORT:-19132}
+      SERVER_UDP_PORTS: "${ADVERTISED_IP:?Set the Windows LAN IPv4 or VPS public IPv4 in .env}:${UDP_PORT_RANGE:-19140-19155}:${UDP_PORT_RANGE:-19140-19155}"
+      ENABLE_LAN_VISIBILITY: "false"
+      ENABLE_SSH: "false"
+    ports:
+      - "${BIND_IP:-0.0.0.0}:${SERVER_PORT:-19132}:${SERVER_PORT:-19132}/tcp"
+      - "${BIND_IP:-0.0.0.0}:${UDP_PORT_RANGE:-19140-19155}:${UDP_PORT_RANGE:-19140-19155}/udp"
+    volumes:
+      - ./data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl --fail --silent --max-time 5 http://127.0.0.1:$${SERVER_PORT}/v1/join >/dev/null"]
+      interval: 30s
+      timeout: 10s
+      start_period: 5m
+      retries: 3
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

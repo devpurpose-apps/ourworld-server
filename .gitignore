@@ -1,0 +1,9 @@
+.env
+data/*
+!data/.gitkeep
+backups/*
+!backups/.gitkeep
+.maintenance.lock
+.restore-*/
+__pycache__/
+*.pyc
