@@ -24,13 +24,14 @@ services:
       ALLOW_LIST_USERS: ${ALLOW_LIST_USERS:-}
       VIEW_DISTANCE: ${VIEW_DISTANCE:-16}
       TICK_DISTANCE: ${TICK_DISTANCE:-4}
-      TRANSPORT: nethernet
+      TRANSPORT: ${TRANSPORT:-raknet}
       SERVER_PORT: ${SERVER_PORT:-19132}
       SERVER_UDP_PORTS: "${ADVERTISED_IP:?Set the Windows LAN IPv4 or VPS public IPv4 in .env}:${UDP_PORT_RANGE:-19140-19155}:${UDP_PORT_RANGE:-19140-19155}"
       ENABLE_LAN_VISIBILITY: "false"
       ENABLE_SSH: "false"
     ports:
       - "${BIND_IP:-0.0.0.0}:${SERVER_PORT:-19132}:${SERVER_PORT:-19132}/tcp"
+      - "${BIND_IP:-0.0.0.0}:${SERVER_PORT:-19132}:${SERVER_PORT:-19132}/udp"
       - "${BIND_IP:-0.0.0.0}:${UDP_PORT_RANGE:-19140-19155}:${UDP_PORT_RANGE:-19140-19155}/udp"
     volumes:
       - ./data:/data
